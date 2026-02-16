@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PowerFit Gym Management</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f') no-repeat center center/cover;
+    min-height:100vh;
+}
+
+.overlay{
+    background:rgba(0,0,0,0.85);
+    min-height:100vh;
+}
+
+/* LOGIN & SIGNUP */
+.auth-box{
+    width:350px;
+    background:rgba(0,0,0,0.9);
+    padding:30px;
+    border-radius:15px;
+    color:white;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 20px red;
+}
+
+.auth-box h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:red;
+}
+
+.auth-box input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:none;
+    border-radius:5px;
+}
+
+.auth-box button{
+    width:100%;
+    padding:10px;
+    background:red;
+    border:none;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.auth-box p{
+    text-align:center;
+    margin-top:10px;
+    cursor:pointer;
+    color:lightgray;
+}
+
+.auth-box p:hover{
+    color:red;
+}
+
+/* DASHBOARD */
+#dashboard{
+    display:none;
+    color:white;
+}
+
+nav{
+    background:black;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+nav h1{ color:red; }
+
+nav button{
+    padding:8px 15px;
+    background:red;
+    border:none;
+    color:white;
+    cursor:pointer;
+}
+
+.sidebar{
+    width:220px;
+    background:#111;
+    height:100vh;
+    position:fixed;
+    padding-top:20px;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    padding:15px;
+    text-decoration:none;
+    border-bottom:1px solid #333;
+}
+
+.sidebar a:hover{
+    background:red;
+}
+
+.content{
+    margin-left:230px;
+    padding:20px;
+}
+
+.section{ display:none; }
+
+.card{
+    background:#1c1c1c;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+    box-shadow:0 0 10px rgba(255,0,0,0.4);
+}
+
+.card h2{
+    margin-bottom:10px;
+    color:red;
+}
+
+.card input, .card select{
+    width:100%;
+    padding:8px;
+    margin:8px 0;
+    border:none;
+    border-radius:5px;
+}
+
+.card button{
+    padding:8px 15px;
+    background:red;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th, td{
+    border:1px solid #444;
+    padding:10px;
+    text-align:center;
+}
+
+th{ background:red; }
+
+.paid{ color:lightgreen; font-weight:bold; }
+.unpaid{ color:orange; font-weight:bold; }
+</style>
+</head>
+
+<body>
+<div class="overlay">
+
+<!-- LOGIN -->
+<div class="auth-box" id="loginPage">
+    <h2>🏋️ Gym Login</h2>
+    <input type="text" id="loginUser" placeholder="Username">
+    <input type="password" id="loginPass" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p onclick="showSignup()">Create Account</p>
+</div>
+
+<!-- SIGNUP -->
+<div class="auth-box" id="signupPage" style="display:none;">
+    <h2>📝 Create Account</h2>
+    <input type="text" id="signupUser" placeholder="Username">
+    <input type="password" id="signupPass" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <p onclick="showLogin()">Back to Login</p>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+
+<nav>
+    <h1>PowerFit Gym Management</h1>
+    <button onclick="logout()">Logout</button>
+</nav>
+
+<div class="sidebar">
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('members')">Members</a>
+    <a href="#" onclick="showSection('packages')">Packages</a>
+    <a href="#" onclick="showSection('trainers')">Trainers</a>
+    <a href="#" onclick="showSection('assign')">Assign Trainer</a>
+    <a href="#" onclick="showSection('payments')">Payments</a>
+</div>
+
+<div class="content">
+
+<!-- HOME -->
+<div id="home" class="section">
+    <div class="card">
+        <h2>Welcome to PowerFit Gym</h2>
+        <p>Manage Members, Trainers and Membership Payments Easily.</p>
+    </div>
+</div>
+
+<!-- MEMBERS -->
+<div id="members" class="section">
+    <div class="card">
+        <h2>Add Member</h2>
+        <input type="text" id="memberName" placeholder="Member Name">
+        <input type="number" id="memberAge" placeholder="Age">
+        <input type="text" id="memberPhone" placeholder="Phone">
+        <input type="email" id="memberEmail" placeholder="Email">
+        <select id="memberPackage">
+            <option>Monthly</option>
+            <option>Quarterly</option>
+            <option>Yearly</option>
+        </select>
+        <button onclick="addMember()">Add Member</button>
+    </div>
+
+    <table id="memberTable">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Package</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </table>
+</div>
+
+<!-- PACKAGES -->
+<div id="packages" class="section">
+    <div class="card">
+        <h2>Gym Packages</h2>
+        <p>💪 Monthly - ₹1000</p>
+        <p>🔥 Quarterly - ₹2500</p>
+        <p>🏆 Yearly - ₹9000</p>
+    </div>
+</div>
+
+<!-- TRAINERS -->
+<div id="trainers" class="section">
+    <div class="card">
+        <h2>Add Trainer</h2>
+        <input type="text" id="trainerName" placeholder="Trainer Name">
+        <button onclick="addTrainer()">Add Trainer</button>
+    </div>
+
+    <table id="trainerTable">
+        <tr><th>Trainer Name</th></tr>
+    </table>
+</div>
+
+<!-- ASSIGN -->
+<div id="assign" class="section">
+    <div class="card">
+        <h2>Assign Trainer</h2>
+        <input type="text" id="assignMember" placeholder="Member Name">
+        <input type="text" id="assignTrainer" placeholder="Trainer Name">
+        <button onclick="assignTrainer()">Assign</button>
+    </div>
+
+    <table id="assignTable">
+        <tr><th>Member</th><th>Trainer</th></tr>
+    </table>
+</div>
+
+<!-- PAYMENTS -->
+<div id="payments" class="section">
+    <div class="card">
+        <h2>Payment Summary</h2>
+        <h3>Total Income: ₹ <span id="totalIncome">0</span></h3>
+    </div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+var savedUser="admin";
+var savedPass="1234";
+var totalIncome=0;
+
+function showSignup(){
+    loginPage.style.display="none";
+    signupPage.style.display="block";
+}
+
+function showLogin(){
+    signupPage.style.display="none";
+    loginPage.style.display="block";
+}
+
+function signup(){
+    savedUser=signupUser.value;
+    savedPass=signupPass.value;
+    alert("Account Created Successfully!");
+    showLogin();
+}
+
+function login(){
+    var user=loginUser.value;
+    var pass=loginPass.value;
+
+    if(user===savedUser && pass===savedPass){
+        loginPage.style.display="none";
+        dashboard.style.display="block";
+        showSection('home');
+    } else alert("Invalid Login!");
+}
+
+function logout(){ location.reload(); }
+
+function showSection(id){
+    var sections=document.getElementsByClassName("section");
+    for(var i=0;i<sections.length;i++)
+        sections[i].style.display="none";
+    document.getElementById(id).style.display="block";
+}
+
+function getAmount(pack){
+    if(pack==="Monthly") return 1000;
+    if(pack==="Quarterly") return 2500;
+    if(pack==="Yearly") return 9000;
+}
+
+function addMember(){
+    var name=memberName.value;
+    var age=memberAge.value;
+    var phone=memberPhone.value;
+    var email=memberEmail.value;
+    var pack=memberPackage.value;
+    var amount=getAmount(pack);
+
+    var row=memberTable.insertRow();
+    row.insertCell(0).innerHTML=name;
+    row.insertCell(1).innerHTML=age;
+    row.insertCell(2).innerHTML=phone;
+    row.insertCell(3).innerHTML=email;
+    row.insertCell(4).innerHTML=pack;
+    row.insertCell(5).innerHTML="₹"+amount;
+    row.insertCell(6).innerHTML="<span class='unpaid'>Unpaid</span>";
+    row.insertCell(7).innerHTML="<button onclick='payNow(this,"+amount+")'>Pay Now</button>";
+}
+
+function payNow(btn,amount){
+    var row=btn.parentNode.parentNode;
+    row.cells[6].innerHTML="<span class='paid'>Paid</span>";
+    btn.disabled=true;
+    btn.innerHTML="Paid";
+    totalIncome+=amount;
+    totalIncome.innerHTML=totalIncome;
+    document.getElementById("totalIncome").innerHTML=totalIncome;
+}
+
+function addTrainer(){
+    var row=trainerTable.insertRow();
+    row.insertCell(0).innerHTML=trainerName.value;
+}
+
+function assignTrainer(){
+    var row=assignTable.insertRow();
+    row.insertCell(0).innerHTML=assignMember.value;
+    row.insertCell(1).innerHTML=assignTrainer.value;
+}
+</script>
+
+</body>
+</html>
