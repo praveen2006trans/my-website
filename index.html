@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PowerFit Gym Management</title>
+<title> Gym Management System</title>
 
 <style>
 *{
@@ -278,7 +278,7 @@ th{ background:red; }
     <div class="card">
         <h2>Assign Trainer</h2>
         <input type="text" id="assignMember" placeholder="Member Name">
-        <input type="text" id="assignTrainer" placeholder="Trainer Name">
+        <input type="text" id="assignTrainerName" placeholder="Trainer Name">
         <button onclick="assignTrainer()">Assign</button>
     </div>
 
@@ -382,9 +382,19 @@ function addTrainer(){
 }
 
 function assignTrainer(){
-    var row=assignTable.insertRow();
-    row.insertCell(0).innerHTML=assignMember.value;
-    row.insertCell(1).innerHTML=assignTrainer.value;
+    var member = document.getElementById("assignMember").value;
+    var trainer = document.getElementById("assignTrainerName").value;
+
+    var table = document.getElementById("assignTable");
+    var row = table.insertRow();
+
+    row.insertCell(0).innerHTML = member;
+    row.insertCell(1).innerHTML = trainer;
+
+    // clear fields
+    document.getElementById("assignMember").value = "";
+    document.getElementById("assignTrainerName").value = "";
+
 }
 </script>
 
